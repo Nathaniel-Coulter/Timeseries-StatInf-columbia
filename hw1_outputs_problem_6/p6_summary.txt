@@ -1,0 +1,92 @@
+
+==============================================================================
+PROBLEM 6 — DATA LOAD AND VALIDATION
+==============================================================================
+Source file: C:\Users\hocke\Desktop\quant_portfolio_scaffold\columbia\stat_inf_class\retail.xlsx
+Workbook first data-series header: Turnover ;  New South Wales ;  Total (Industry) ;
+Series ID: A3348645F
+Observations: 484
+Start: Apr-1982
+End: Jul-2022
+Rows skipped during parsing: 0
+Missing months inside observed span: 0
+Saved cleaned data: p6_data_clean.csv
+
+==============================================================================
+DESCRIPTIVE FACTS
+==============================================================================
+Overall mean: 4814.3810
+Population-style sample SD (ddof=0): 2555.2523
+Minimum observed value: 1214.5000
+Maximum observed value: 12782.9000
+Simple linear trend slope: 17.5905 units/month
+Simple linear trend slope: 211.0858 units/year
+Mean of first 12 observations: 1322.3167
+Mean of last 12 observations: 10144.9833
+
+==============================================================================
+Problem 6(a) — Sequential time plot
+==============================================================================
+Saved p6a_time_series.png
+
+==============================================================================
+Problem 6(b) — Seasonal plots and calendar-month averages
+==============================================================================
+Jan: mean=4750.4675 (n=40)
+Feb: mean=4308.1150 (n=40)
+Mar: mean=4745.7075 (n=40)
+Apr: mean=4533.4683 (n=41)
+May: mean=4729.0390 (n=41)
+Jun: mean=4630.1244 (n=41)
+Jul: mean=4696.5024 (n=41)
+Aug: mean=4547.3025 (n=40)
+Sep: mean=4589.0475 (n=40)
+Oct: mean=4848.5600 (n=40)
+Nov: mean=5070.6500 (n=40)
+Dec: mean=6340.2975 (n=40)
+Highest-average month: Dec (6340.2975)
+Note: these are raw calendar-month averages; the series is not detrended first.
+Saved p6b_seasonal_linear.png
+Saved p6b_seasonal_cyclical.png
+
+==============================================================================
+Problem 6(c) — Sample autocorrelation function
+==============================================================================
+lag  0: gamma_hat=6529314.3029, rho_hat=  1.0000
+lag  1: gamma_hat=6244159.2465, rho_hat=  0.9563
+lag  2: gamma_hat=6080657.6981, rho_hat=  0.9313
+lag  3: gamma_hat=6028157.0363, rho_hat=  0.9232
+lag  4: gamma_hat=5965115.3563, rho_hat=  0.9136
+lag  5: gamma_hat=5953432.3648, rho_hat=  0.9118
+lag  6: gamma_hat=5903761.1087, rho_hat=  0.9042
+lag  7: gamma_hat=5873767.2604, rho_hat=  0.8996
+lag  8: gamma_hat=5762151.3367, rho_hat=  0.8825
+lag  9: gamma_hat=5727762.2170, rho_hat=  0.8772
+lag 10: gamma_hat=5681984.2628, rho_hat=  0.8702
+lag 11: gamma_hat=5762123.5151, rho_hat=  0.8825
+lag 12: gamma_hat=5955356.4703, rho_hat=  0.9121
+lag 13: gamma_hat=5704920.0089, rho_hat=  0.8737
+lag 14: gamma_hat=5566746.5076, rho_hat=  0.8526
+lag 15: gamma_hat=5534494.8347, rho_hat=  0.8476
+lag 16: gamma_hat=5478833.2178, rho_hat=  0.8391
+lag 17: gamma_hat=5467036.3526, rho_hat=  0.8373
+lag 18: gamma_hat=5413986.1412, rho_hat=  0.8292
+lag 19: gamma_hat=5387237.1119, rho_hat=  0.8251
+lag 20: gamma_hat=5285669.7473, rho_hat=  0.8095
+lag 21: gamma_hat=5255595.6275, rho_hat=  0.8049
+lag 22: gamma_hat=5209379.6073, rho_hat=  0.7978
+lag 23: gamma_hat=5270644.6465, rho_hat=  0.8072
+lag 24: gamma_hat=5436446.4323, rho_hat=  0.8326
+lag 36: gamma_hat=4968795.2704, rho_hat=  0.7610
+lag 48: gamma_hat=4507283.9710, rho_hat=  0.6903
+lag 60: gamma_hat=4036876.0310, rho_hat=  0.6183
+Saved p6c_acf.png (lags 0 through 60)
+Saved p6_acf_values.csv
+
+==============================================================================
+DONE
+==============================================================================
+All outputs saved to: C:\Users\hocke\Desktop\quant_portfolio_scaffold\columbia\stat_inf_class\hw1_problem6_outputs
+The original retail.xlsx file was not modified.
+Use the figures/numerical summaries for 6(a)-6(c).
+Write 6(d)-6(e) as statistical reasoning based on the observed plots/data.
