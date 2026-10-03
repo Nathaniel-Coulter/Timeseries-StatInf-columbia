@@ -1,0 +1,3 @@
+Problem 4(c) Monte Carlo sanity check with 500,000 U draws
+P(X1 > sin(pi/3), X2 > sin(pi/3)) ≈ 0.000000 (exact 0)
+P(X2 > sin(pi/3), X3 > sin(pi/3)) ≈ 0.027816 (exact 0.027778)

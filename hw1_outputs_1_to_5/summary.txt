@@ -1,0 +1,210 @@
+
+========================================================================
+PROBLEM 1 — IID simulations and sample autocorrelation
+========================================================================
+Using n = 48 observations per realization and 4 independent realizations
+for each distribution. For the Normal case we use N(0,1), a standard
+choice because location/scale do not affect the independence lesson.
+
+========================================================================
+Problem 1(a) — Independent Normal series
+========================================================================
+replicate 1: sample lag-1 ACF = -0.2189
+replicate 2: sample lag-1 ACF = -0.1520
+replicate 3: sample lag-1 ACF = +0.0400
+replicate 4: sample lag-1 ACF = -0.0754
+
+========================================================================
+Problem 1(b) — Independent chi-square(df=2) series
+========================================================================
+replicate 1: sample lag-1 ACF = +0.0947
+replicate 2: sample lag-1 ACF = +0.2880
+replicate 3: sample lag-1 ACF = +0.0243
+replicate 4: sample lag-1 ACF = -0.0489
+
+========================================================================
+Problem 1(c) — Independent t(df=5) series
+========================================================================
+replicate 1: sample lag-1 ACF = -0.0202
+replicate 2: sample lag-1 ACF = +0.0948
+replicate 3: sample lag-1 ACF = +0.2315
+replicate 4: sample lag-1 ACF = -0.1426
+
+========================================================================
+Problem 1(d) — Evaluate the supplied AI autocorrelation interpretation
+========================================================================
+Approximate benchmark: ±1.96/sqrt(48) = ±0.2829
+Normal    : rho_hat(1) = +0.27; |rho_hat| <= 0.2829 -> inside the approximate bounds.
+Chi-square: rho_hat(1) = -0.08; |rho_hat| <= 0.2829 -> inside the approximate bounds.
+t(df=5)   : rho_hat(1) = +0.04; |rho_hat| <= 0.2829 -> inside the approximate bounds.
+Key check: 0.27 is still inside the approximate ±1.96/sqrt(48) bounds.
+Therefore one observed sample ACF of 0.27 is not enough, by this benchmark,
+to conclude that the underlying observations are dependent.
+Repeating the simulation demonstrates sampling variability: IID series can
+produce noticeably nonzero sample autocorrelations by chance.
+
+========================================================================
+PROBLEM 2 — Weak stationarity, ACVF, ACF, and dependence
+========================================================================
+
+========================================================================
+Problem 2(a) — X_t = Z_t Z_{t-2}
+========================================================================
+Exact results:
+E[X_t] = 0
+gamma_X(0) = 1
+gamma_X(h) = 0 for every h != 0
+rho_X(0) = 1, rho_X(h) = 0 for every h != 0
+Conclusion: weakly stationary.
+Important: zero autocorrelation at nonzero lags does NOT make the process IID.
+
+========================================================================
+Problem 2(b) — X_t = a + b Z_t + c Z_{t-1}
+========================================================================
+Exact results (assuming b^2 + c^2 > 0):
+E[X_t] = a
+gamma_X(0) = b^2 + c^2
+gamma_X(1) = gamma_X(-1) = b c
+gamma_X(h) = 0 for |h| > 1
+rho_X(1) = rho_X(-1) = b c / (b^2 + c^2)
+rho_X(h) = 0 for |h| > 1
+Conclusion: weakly stationary.
+Edge case: if b = c = 0, the process is constant a and its ACF is undefined because variance is zero.
+
+========================================================================
+Problem 2(c) — X_t = Z_t - Z_{t-3}
+========================================================================
+Exact results:
+E[X_t] = 0
+gamma_X(0) = 2
+gamma_X(3) = gamma_X(-3) = -1
+gamma_X(h) = 0 otherwise
+rho_X(3) = rho_X(-3) = -1/2
+rho_X(h) = 0 otherwise for h != 0
+Conclusion: weakly stationary.
+
+========================================================================
+Problem 2(d) — X_t = Z_t cos(c t) + Z_{t-1} sin(c t)
+========================================================================
+E[X_t] = 0 and Var(X_t) = 1 for every t.
+At lag 1:
+gamma_t(1) = cos(c t) sin(c(t+1))
+           = 1/2 [sin(c) + sin(2 c t + c)].
+For a generic constant c this depends on t, so the process is NOT weakly stationary.
+Special case: if c is an integer multiple of pi, sin(c t)=0 for integer t
+and X_t = (+/-) Z_t; then the process is IID N(0,1) and is stationary.
+Numerical illustration saved for c=0.7: p2d_lag1_covariance_check.csv
+
+========================================================================
+Problem 2(e) — Is process (a) IID?
+========================================================================
+X_t^2 X_{t+2}^2 = Z_t^4 Z_{t-2}^2 Z_{t+2}^2
+E[X_t^2 X_{t+2}^2] = E[Z_t^4] E[Z_{t-2}^2] E[Z_{t+2}^2] = 3
+E[X_t^2] E[X_{t+2}^2] = 1 * 1 = 1
+Comparison: 3 != 1
+Therefore X_t and X_{t+2} are not independent, despite zero covariance.
+Monte Carlo check (500,000 draws):
+  E[X_t^2 X_(t+2)^2] ≈ 3.0272 (exact 3)
+  E[X_t^2]E[X_(t+2)^2] ≈ 0.9984 (exact 1)
+
+========================================================================
+PROBLEM 3 — Y_t = X for all t
+========================================================================
+
+========================================================================
+Problem 3(a) — Strict and weak stationarity
+========================================================================
+All coordinates are the same random variable X.
+Any shifted finite vector (Y_{t1+h},...,Y_{tk+h}) equals (X,...,X),
+the same as (Y_{t1},...,Y_{tk}); hence the process is strictly stationary.
+Also E[Y_t]=mu and Cov(Y_t,Y_{t+h})=sigma^2 for every h,
+so it is weakly stationary.
+
+========================================================================
+Problem 3(b) — Autocovariance
+========================================================================
+gamma_Y(h) = sigma^2 for every lag h.
+If sigma^2 > 0, rho_Y(h) = 1 for every h.
+
+========================================================================
+Problem 3(c) — Typical time plot
+========================================================================
+Saved p3_typical_path.png.
+The numerical height 1.25 is arbitrary; the mathematical point is that a single realization is a horizontal line because Y_t equals the same X at every t.
+
+========================================================================
+Problem 3(d) — Variance of the sample mean
+========================================================================
+Ybar_n = (1/n) sum Y_t = (1/n)(n X) = X.
+Therefore Var(Ybar_n) = Var(X) = sigma^2, not sigma^2/n.
+Observing the process longer repeats the same random draw and provides no new independent information about mu.
+
+========================================================================
+PROBLEM 4 — X_t = sin(2 pi U t), U ~ Uniform(0,1)
+========================================================================
+
+========================================================================
+Problem 4(a) — Mean and autocovariance
+========================================================================
+For integer t >= 1:
+E[X_t] = integral_0^1 sin(2 pi u t) du = 0.
+E[X_t^2] = 1/2, so gamma(0) = 1/2.
+For h != 0, orthogonality of distinct integer-frequency sine functions gives E[X_t X_{t+h}] = 0.
+Thus gamma(h) = 1/2 if h=0 and 0 otherwise.
+
+========================================================================
+Problem 4(b) — Weak stationarity
+========================================================================
+The mean is constant (0), the variance is constant (1/2), and the autocovariance depends only on the lag. Therefore X_t is weakly stationary.
+
+========================================================================
+Problem 4(c) — Not strictly stationary
+========================================================================
+Using the hint threshold sin(pi/3) = sqrt(3)/2:
+P(X_1 > sin(pi/3), X_2 > sin(pi/3)) = 0.
+P(X_2 > sin(pi/3), X_3 > sin(pi/3)) = 1/36.
+These joint probabilities differ under a one-step time shift, so the process is not strictly stationary.
+Monte Carlo: first probability ≈ 0.000000; second ≈ 0.027816.
+Saved p4_probability_mc_check.txt.
+
+========================================================================
+Problem 4(d) — Sample mean variance versus IID-CLT claim
+========================================================================
+Because gamma(h)=0 for h != 0 and Var(X_t)=1/2:
+Var(Xbar_n) = (1/n^2) * n * (1/2) = 1/(2n).
+That variance calculation IS justified by the autocovariances.
+However, zero autocorrelation does not imply independence.
+Therefore the usual IID central limit theorem cannot be invoked merely from the fact that all nonzero-lag autocorrelations are zero.
+The homework explicitly says the actual limiting distribution need not be derived.
+
+========================================================================
+PROBLEM 5 — Z_t = X_t + Y_t
+========================================================================
+
+========================================================================
+Problem 5(a) — Stationarity and ACVF of the sum
+========================================================================
+Assume X and Y are weakly stationary and X_s is uncorrelated with Y_t for every pair s,t.
+E[Z_t] = E[X_t] + E[Y_t] = mu_X + mu_Y, constant in t.
+gamma_Z(h) = Cov(X_t+Y_t, X_{t+h}+Y_{t+h})
+           = gamma_X(h) + gamma_Y(h),
+because both cross-covariance terms are zero.
+Hence Z_t is weakly stationary.
+
+========================================================================
+Problem 5(b) — Do +0.8 and -0.8 correlations cancel?
+========================================================================
+gamma_X(1) = rho_X(1) Var(X_t) = 0.8 * 1 = 0.8
+gamma_Y(1) = rho_Y(1) Var(Y_t) = -0.8 * 4 = -3.2
+gamma_Z(0) = Var(X_t)+Var(Y_t) = 5
+gamma_Z(1) = gamma_X(1)+gamma_Y(1) = -2.4
+rho_Z(1) = gamma_Z(1)/gamma_Z(0) = -0.48
+So the two lag-1 correlations do NOT cancel here.
+More generally, if rho_X(1) = -rho_Y(1) != 0, cancellation requires Var(X_t) = Var(Y_t), equivalently gamma_X(1)+gamma_Y(1)=0.
+
+========================================================================
+DONE
+========================================================================
+All outputs saved to: C:\Users\hocke\Desktop\quant_portfolio_scaffold\columbia\stat_inf_class\hw1_outputs_1_to_5
+Use the plots/results as support when writing the LaTeX derivations.
+Remember: the numerical checks for Problems 2–5 do not replace proofs.
