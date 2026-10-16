@@ -1,0 +1,10 @@
+model,parameter,estimate
+5c_periodic,a,3.412812008179997
+5c_periodic,b,0.003120961557495803
+5c_periodic,beta1_sin,0.2974298062966242
+5c_periodic,beta2_cos,0.24765236848026453
+5d_with_spike,a,3.3404375964121824
+5d_with_spike,b,0.0031210889393090534
+5d_with_spike,beta1_sin,0.1519133721715459
+5d_with_spike,beta2_cos,0.2475390414682476
+5d_with_spike,beta3_spike,1.7399087919362886

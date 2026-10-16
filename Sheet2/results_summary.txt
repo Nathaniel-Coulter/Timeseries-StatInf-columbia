@@ -1,0 +1,53 @@
+STAT GR5263 / Homework 2 / Problem 5 -- automatic results
+==================================================================
+Data file: C:\Users\hocke\Desktop\quant_portfolio_scaffold\columbia\stat_inf_class\simu.txt
+Number of observations: 1000
+Original data min/max: 6.516202 / 62.215633
+Time index: t=1,...,n
+
+5(a): Original data and transformation comparison
+Blockwise SDs are computed from first differences, excluding differences
+touching the known 24-period spikes. Lower CV = more stable variation.
+  original: CV=0.0474; five block SDs=[1.139681, 1.241278, 1.273845, 1.178592, 1.159161]
+      sqrt: CV=0.2250; five block SDs=[0.167833, 0.144983, 0.129583, 0.106936, 0.095547]
+       log: CV=0.4705; five block SDs=[0.101169, 0.068771, 0.053039, 0.039061, 0.031637]
+Selected transformation, comparing sqrt vs log: SQRT
+Note: selection is relative to the two REQUIRED transformations; it does
+not imply that transforming improves upon the untransformed data.
+Interpret the original plot and transformed plots when discussing the
+additive model and possible stationarity of its residual component.
+
+5(b): Smoothers
+Moving average: centered (2k+1) = 11 observations; k=5.
+Gaussian kernel: bandwidth b=6, truncated at +/-4b.
+At series edges, the available smoothing weights are renormalized.
+MA residual RMSE: 0.372913
+Gaussian residual RMSE: 0.414437
+
+5(c): Periodic trend model
+             a =  3.41281201
+             b =  0.00312096
+     beta1_sin =  0.29742981
+     beta2_cos =  0.24765237
+  RMSE=0.407299
+  R^2=0.841727
+  Lag-one residual correlation=0.201526
+  RMSE at spike times=1.549185
+
+5(d): Model with spike
+             a =  3.34043760
+             b =  0.00312109
+     beta1_sin =  0.15191337
+     beta2_cos =  0.24753904
+   beta3_spike =  1.73990879
+  RMSE=0.233804
+  R^2=0.947846
+  Lag-one residual correlation=0.829661
+  RMSE at spike times=0.288551
+
+5(d) vs. 5(c): reduction in residual RMSE = 42.60%
+IMPORTANT: Autocorrelation may remain in the residuals: it can be
+consistent with a stationary error process; zero ACF is not required.
+All fitted equations and residuals use the SELECTED transformed scale.
+
+Saved 8 PNG plots + 4 CSV files + this summary.
