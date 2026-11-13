@@ -1,0 +1,937 @@
+\documentclass[11pt]{article}
+
+% ---------- Page layout ----------
+\usepackage[
+    letterpaper,
+    left=0.9in,
+    right=0.9in,
+    bottom=0.9in,
+    top=0.5in
+]{geometry}
+
+% ---------- Fonts ----------
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{hyperref}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+% ---------- Mathematics ----------
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{mathtools}
+
+% ---------- Figures ----------
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage[
+    font=small,
+    labelfont=bf
+]{caption}
+\usepackage{subcaption}
+
+% ---------- Columbia logo ----------
+\usepackage{tikz}
+\usepackage{eso-pic}
+
+% Put Columbia logo in upper-left corner of first page
+\AddToShipoutPictureBG*{%
+    \begin{tikzpicture}[remember picture,overlay]
+        \node[
+            anchor=north west,
+            inner sep=0pt,
+            opacity=0.75
+        ]
+        at ([xshift=0.45cm,yshift=-0.45cm]current page.north west)
+        {\includegraphics[width=6cm]{mafn.png}};
+    \end{tikzpicture}
+}
+
+% ---------- Slightly tighter figure spacing ----------
+\setlength{\textfloatsep}{12pt}
+\setlength{\floatsep}{10pt}
+\setlength{\intextsep}{10pt}
+
+
+% Python code formatting
+\usepackage{listings}
+\usepackage{xcolor}
+
+% Dark code theme
+\definecolor{codebg}{HTML}{15191F}
+\definecolor{codefg}{HTML}{E6EDF3}
+\definecolor{codekeyword}{HTML}{C792EA}
+\definecolor{codestring}{HTML}{A5D6A7}
+\definecolor{codecomment}{HTML}{7F8C98}
+\definecolor{codenumber}{HTML}{8B949E}
+\definecolor{codeborder}{HTML}{30363D}
+
+\lstdefinestyle{darkpython}{
+    language=Python,
+    backgroundcolor=\color{codebg},
+    basicstyle=\ttfamily\scriptsize\color{codefg},
+    keywordstyle=\color{codekeyword}\bfseries,
+    stringstyle=\color{codestring},
+    commentstyle=\color{codecomment}\itshape,
+    numberstyle=\tiny\color{codenumber},
+    numbers=left,
+    numbersep=12pt,
+    stepnumber=1,
+    frame=single,
+    rulecolor=\color{codeborder},
+    framesep=7pt,
+    xleftmargin=15pt,
+    xrightmargin=5pt,
+    framexleftmargin=10pt,
+    breaklines=true,
+    breakatwhitespace=false,
+    columns=fullflexible,
+    keepspaces=true,
+    showstringspaces=false,
+    tabsize=4,
+    captionpos=b,
+    aboveskip=12pt,
+    belowskip=12pt
+}
+
+% ---------- Document ----------
+\begin{document}
+
+\vspace*{0.25in}
+
+\begin{center}
+    {\Large\textbf{Nathaniel Coulter}\footnote{\href{https://github.com/Nathaniel-Coulter/Timeseries-StatInf-columbia}{github.com/Nathaniel-Coulter/Timeseries-StatInf-columbia}}}\\[3pt]
+    {\large STAT 4263/5263 — Statistical Inference and Time Series Modeling}\\
+    {\normalsize Homework 4 - 13 November 2026}
+\end{center}
+
+\vspace{0.5em}
+
+
+\subsection*{Problem 1(a)}
+
+For the ARMA(1,1) model
+\[
+X_t=0.7X_{t-1}+W_t+0.4W_{t-1},
+\]
+we have \(\phi=0.7\), \(\theta=0.4\), and
+\(\sigma_W^2=1\).
+
+Using the given autocovariance formulas,
+\[
+\begin{aligned}
+\gamma(0)
+&=1+\frac{(0.4+0.7)^2}{1-0.7^2}\\
+&=3.372549,
+\\[4pt]
+\gamma(1)
+&=0.4+0.7+
+\frac{(0.4+0.7)^2(0.7)}{1-0.7^2}\\
+&=2.760784.
+\end{aligned}
+\]
+
+Therefore,
+\[
+\begin{aligned}
+\rho(1)&=\frac{\gamma(1)}{\gamma(0)}
+=0.818605,\\
+\rho(2)&=0.7\rho(1)=0.573023,\\
+\rho(3)&=0.7\rho(2)=0.401116.
+\end{aligned}
+\]
+
+\textbf{Step 1:} For \(n=1\),
+\[
+\boxed{\phi_{11}=\rho(1)=0.818605}.
+\]
+
+The normalized prediction-error variance is
+\[
+v_1=1-\phi_{11}^2=0.329886.
+\]
+
+\textbf{Step 2:} For \(n=2\),
+\[
+\begin{aligned}
+\phi_{22}
+&=\frac{\rho(2)-\phi_{11}\rho(1)}
+{1-\phi_{11}\rho(1)}\\
+&=\frac{0.573023-(0.818605)^2}
+{1-(0.818605)^2}\\
+&=\boxed{-0.294314}.
+\end{aligned}
+\]
+
+Updating the previous coefficient,
+\[
+\begin{aligned}
+\phi_{21}
+&=\phi_{11}-\phi_{22}\phi_{11}\\
+&=0.818605-(-0.294314)(0.818605)\\
+&=\boxed{1.059532}.
+\end{aligned}
+\]
+
+The normalized prediction-error variance becomes
+\[
+\begin{aligned}
+v_2
+&=v_1(1-\phi_{22}^2)\\
+&=(0.329886)(1-(-0.294314)^2)\\
+&=0.301311.
+\end{aligned}
+\]
+
+\textbf{Step 3:} For \(n=3\),
+\[
+\begin{aligned}
+\phi_{33}
+&=\frac{\rho(3)-\phi_{21}\rho(2)
+-\phi_{22}\rho(1)}{v_2}\\
+&=\frac{0.034907}{0.301311}\\
+&=\boxed{0.115850}.
+\end{aligned}
+\]
+
+Updating the remaining coefficients,
+\[
+\begin{aligned}
+\phi_{31}
+&=\phi_{21}-\phi_{33}\phi_{22}\\
+&=1.059532-(0.115850)(-0.294314)\\
+&=\boxed{1.093628},
+\\[6pt]
+\phi_{32}
+&=\phi_{22}-\phi_{33}\phi_{21}\\
+&=-0.294314-(0.115850)(1.059532)\\
+&=\boxed{-0.417062}.
+\end{aligned}
+\]
+
+Thus, the best linear predictor of \(X_4\)
+using \(X_1,X_2,X_3\) is
+\[
+\boxed{
+X_4^{(3)}
+=1.093628X_3-0.417062X_2+0.115850X_1.
+}
+\]
+
+\subsection*{Problem 1(b)}
+
+The AI's mistake occurs in its calculation of
+\(\phi_{33}\). It uses autocorrelations in the
+numerator but the unnormalized prediction-error
+variance in the denominator.
+
+Specifically, the AI uses
+\[
+\gamma(0)(1-\phi_{11}^2)(1-\phi_{22}^2)
+=1.0162.
+\]
+
+However, when the numerator is expressed
+using autocorrelations, the denominator must
+be the \textbf{normalized} prediction-error
+variance:
+\[
+\begin{aligned}
+v_2
+&=(1-\phi_{11}^2)(1-\phi_{22}^2)\\
+&=\boxed{0.301311}.
+\end{aligned}
+\]
+
+Consequently,
+\[
+\boxed{
+\phi_{33}
+=\frac{0.034907}{0.301311}
+=0.115850
+}
+\]
+rather than \(0.0344\).
+
+This error changes \(\phi_{33}\) and the
+updated coefficients \(\phi_{31}\) and
+\(\phi_{32}\), while leaving \(\phi_{11}\),
+\(\phi_{21}\), and \(\phi_{22}\) unchanged.
+
+It also invalidates the AI's conclusion
+that an AR(2) model is sufficient.
+
+\subsection*{Problem 1(c)}
+
+The AI's conclusion that an AR(2) model
+is sufficient is \textbf{incorrect}.
+
+For an AR(2) process, the theoretical PACF
+cuts off after lag 2, meaning
+\[
+\phi_{hh}=0,\qquad h>2.
+\]
+
+Using the approximate 95\% confidence bounds
+with \(n=1440\),
+\[
+\pm\frac{1.96}{\sqrt{1440}}
+=\boxed{\pm0.05165}.
+\]
+
+However, the correctly calculated
+third partial autocorrelation is
+\[
+\boxed{
+|\phi_{33}|=0.11585>0.05165.
+}
+\]
+
+Thus, the lag-three PACF is outside these
+bounds, contradicting the AI's argument
+that the PACF cuts off after lag 2.
+
+Furthermore, the underlying process is
+ARMA(1,1), whose theoretical PACF generally
+decays rather than cutting off at a finite lag.
+
+Therefore, an AR(2) model is not an adequate
+exact representation of the specified process.
+If an AR approximation is required, higher-order
+models should be considered and evaluated using
+residual diagnostics.
+
+The confidence bounds are an approximate
+sampling guideline; since these PACF values
+were calculated from the fitted theoretical
+ACF rather than a directly estimated sample
+PACF, they should not be interpreted as a
+formal significance test.
+
+
+\subsection*{Problem 2}
+
+Let \(X_t\) be a stationary AR(1) process:
+\[
+X_t-\mu=\phi(X_{t-1}-\mu)+W_t,
+\qquad |\phi|<1.
+\]
+
+For an AR(1), the autocovariance function is
+\[
+\gamma(h)=\gamma(0)\phi^{|h|}.
+\]
+
+We seek the best linear predictor of \(X_2\)
+given \(X_1\) and \(X_3\):
+\[
+\hat X_2=a+b_1X_1+b_3X_3.
+\]
+
+The covariance matrix of \((X_1,X_3)\) is
+\[
+\Gamma=\gamma(0)
+\begin{pmatrix}
+1 & \phi^2\\
+\phi^2 & 1
+\end{pmatrix},
+\]
+and the covariance vector with \(X_2\) is
+\[
+\boldsymbol{\gamma}
+=\gamma(0)
+\begin{pmatrix}
+\phi\\
+\phi
+\end{pmatrix}.
+\]
+
+The optimal coefficients satisfy
+\[
+\begin{pmatrix}
+b_1\\b_3
+\end{pmatrix}
+=\Gamma^{-1}\boldsymbol{\gamma}.
+\]
+
+By symmetry, \(b_1=b_3=b\). The normal
+equations give
+\[
+b(1+\phi^2)=\phi,
+\]
+so
+\[
+\boxed{b_1=b_3=\frac{\phi}{1+\phi^2}}.
+\]
+
+Therefore, the best linear predictor is
+\[
+\boxed{
+\hat X_2
+=\mu+\frac{\phi}{1+\phi^2}
+\left[(X_1-\mu)+(X_3-\mu)\right].
+}
+\]
+
+For a zero-mean AR(1), this simplifies to
+\[
+\boxed{
+\hat X_2=\frac{\phi}{1+\phi^2}(X_1+X_3).
+}
+\]
+
+
+\subsection*{Problem 4(a)}
+
+The file \texttt{ibmclose.csv} contains 369 daily
+closing prices. The original series, sample ACF,
+and sample PACF are displayed below.
+
+\begin{center}
+\includegraphics[width=0.95\linewidth]{01_original_acf_pacf.png}
+\end{center}
+
+The series exhibits substantial changes in its
+level, including a pronounced decline in the
+later observations. The sample ACF decreases
+very slowly and remains strongly positive over
+many lags, while the PACF has a dominant spike
+at lag one.
+
+These features suggest that the original price
+series is \textbf{nonstationary}. The
+augmented Dickey--Fuller test gives
+\(p\approx0.777\), so the unit-root null
+hypothesis is not rejected.
+
+\subsection*{Problem 4(b)}
+
+We consider the three transformations
+\[
+g_1(X_t)=\log X_t,\qquad
+g_2(X_t)=\sqrt{X_t},\qquad
+g_3(X_t)=X_t^2,
+\]
+and calculate their first differences:
+\[
+Y_t^{(j)}=g_j(X_t)-g_j(X_{t-1}).
+\]
+
+\begin{center}
+\includegraphics[width=0.95\linewidth]{02_transformed_differences.png}
+\end{center}
+
+Variance stability was compared using the
+coefficient of variation of the standard
+deviations across six consecutive time blocks.
+
+\begin{center}
+\begin{tabular}{lc}
+\hline
+Transformation & CV of block SDs\\
+\hline
+\(\Delta\log X_t\) & 0.5545\\
+\(\Delta\sqrt{X_t}\) & 0.4570\\
+\(\Delta X_t^2\) & 0.2291\\
+\hline
+\end{tabular}
+\end{center}
+
+Among these transformations, the squared-price
+difference has the most stable variation by
+this measure. We therefore select
+\[
+\boxed{Y_t=X_t^2-X_{t-1}^2}.
+\]
+
+For numerical stability during estimation,
+the differences were rescaled by \(10^{-4}\).
+The corresponding fitted series is
+\[
+Z_t=10^{-4}Y_t.
+\]
+
+For each transformation, ARMA(\(p,q\))
+models were fitted with a mean, considering
+\(p,q\in\{0,1,2,3\}\). The selected orders are
+
+\begin{center}
+\begin{tabular}{lccc}
+\hline
+Transformation & AIC & BIC & AICc\\
+\hline
+Logarithm & (3,2) & (0,0) & (3,2)\\
+Square root & (3,2) & (0,0) & (3,2)\\
+Square & (0,1) & (0,1) & (0,1)\\
+\hline
+\end{tabular}
+\end{center}
+
+For the selected squared-price difference,
+the ARMA(0,1) model with a mean has
+\[
+\boxed{
+\begin{aligned}
+\mathrm{AIC}&=709.3898,\\
+\mathrm{BIC}&=721.1140,\\
+\mathrm{AICc}&=709.4557.
+\end{aligned}
+}
+\]
+
+Its maximum-likelihood parameter estimates
+on the scaled series are
+\[
+\boxed{
+\hat\mu=-0.022815,\qquad
+\hat\theta_1=0.148306,\qquad
+\hat\sigma_W^2=0.395910.
+}
+\]
+
+Thus, the fitted model is
+\[
+Z_t=-0.022815+W_t+0.148306W_{t-1},
+\]
+where \(W_t\) has estimated variance
+\(0.395910\).
+
+\subsection*{Problem 4(c)}
+
+For the AIC-selected ARMA(0,1) model, we
+compare estimation with and without a mean.
+
+The estimated mean with an intercept is
+\[
+\hat\mu=-0.022815.
+\]
+
+Its approximate 95\% confidence interval is
+\[
+\boxed{(-0.100216,\ 0.054587)}.
+\]
+
+Since this interval contains zero, there
+is insufficient evidence that the mean
+of the differenced series is nonzero.
+
+The information criteria are
+
+\begin{center}
+\begin{tabular}{lccc}
+\hline
+Specification & AIC & BIC & AICc\\
+\hline
+With mean & 709.3898 & 721.1140 & 709.4557\\
+Without mean & 707.7565 & 715.5727 & 707.7894\\
+\hline
+\end{tabular}
+\end{center}
+
+All three criteria favor excluding the mean.
+Therefore, the preferred specification is
+\[
+\boxed{Z_t=W_t+0.149133W_{t-1}},
+\]
+with
+\[
+\boxed{\hat\sigma_W^2=0.396303}.
+\]
+
+\subsection*{Problem 4(d)}
+
+We examine the standardized residuals, their
+sample ACF, and the normal Q--Q plot for the
+selected ARMA(0,1) model without a mean.
+
+\begin{center}
+\includegraphics[width=0.95\linewidth]{03_square_diagnostics.png}
+\end{center}
+
+The residual ACF is relatively small at
+most lags, with no obvious persistent
+autocorrelation pattern.
+
+The Ljung--Box test results are
+\[
+\begin{array}{lc}
+\hline
+\text{Lag} & p\text{-value}\\
+\hline
+10 & 0.5157\\
+20 & 0.1190\\
+\hline
+\end{array}
+\]
+
+Both p-values exceed \(0.05\), so the
+null hypothesis of no residual
+autocorrelation through the corresponding
+lags is not rejected.
+
+The Q--Q plot is approximately linear
+in its central portion, but deviations
+appear in the tails. Four standardized
+residuals exceed three in absolute value.
+
+The Jarque--Bera test also rejects normality,
+with \(p<0.001\), indicating that the
+Gaussian error assumption is imperfect.
+
+Overall, the no-mean ARMA(0,1) model
+provides an adequate parsimonious description
+of the serial dependence in the transformed
+differences, although the residual tails
+suggest possible outliers or departures
+from normality.
+
+
+\subsection*{Problem 3(a)}
+
+We generate 1,000 independent realizations
+of the MA(2) process
+\[
+X_t=W_t+0.8W_{t-1}-0.1W_{t-2},
+\qquad W_t\sim WN(0,1).
+\]
+
+Each simulated series contains \(n=200\)
+observations, following a burn-in of
+300 observations. A fixed random seed
+is used for reproducibility.
+
+For each series, MA(\(q\)) models are
+estimated by Gaussian maximum likelihood
+for \(q=0,1,2,3,4\), including a mean.
+
+Model selection is based on
+\[
+\begin{aligned}
+\mathrm{AIC}&=-2\ell+2k,\\
+\mathrm{BIC}&=-2\ell+k\log n,\\
+\mathrm{AICc}&=\mathrm{AIC}
++\frac{2k(k+1)}{n-k-1},
+\end{aligned}
+\]
+where \(\ell\) is the maximized
+log-likelihood and \(k=q+2\) counts
+the mean, MA coefficients, and
+innovation variance.
+
+The estimated selection probabilities are
+
+\begin{center}
+\begin{tabular}{cccc}
+\hline
+\(q\) & AIC & BIC & AICc\\
+\hline
+0 & 0.000 & 0.000 & 0.000\\
+1 & 0.429 & 0.778 & 0.445\\
+2 & 0.401 & 0.212 & 0.404\\
+3 & 0.099 & 0.008 & 0.094\\
+4 & 0.071 & 0.002 & 0.057\\
+\hline
+\end{tabular}
+\end{center}
+
+The true order is \(q=2\). AIC and
+AICc select the correct order with
+probabilities 0.401 and 0.404,
+respectively, while BIC selects
+the correct order with probability 0.212.
+
+BIC favors the simpler MA(1) model
+in 77.8\% of simulations. This likely
+reflects the relatively small magnitude
+of the second MA coefficient,
+\(\theta_2=-0.1\), combined with
+BIC's stronger complexity penalty.
+
+AIC selects orders above the true
+order in 17.0\% of simulations,
+compared with 15.1\% for AICc.
+Thus, AICc slightly reduces
+overfitting relative to AIC.
+
+\subsection*{Problem 3(b)}
+
+We generate 1,000 independent realizations
+of the AR(3) process
+\[
+X_t=0.8X_{t-1}-0.2X_{t-2}
+-0.1X_{t-3}+W_t,
+\]
+where \(W_t\sim WN(0,1)\).
+
+Each series contains \(n=200\) observations,
+following a burn-in of 300 observations.
+
+For each simulated series, AR(\(p\))
+models with a mean are fitted by Gaussian
+maximum likelihood, considering
+\(p=0,1,2,3,4,5\).
+
+The same information criteria are used,
+with \(k=p+2\).
+
+The estimated selection probabilities are
+
+\begin{center}
+\begin{tabular}{cccc}
+\hline
+\(p\) & AIC & BIC & AICc\\
+\hline
+0 & 0.000 & 0.000 & 0.000\\
+1 & 0.005 & 0.047 & 0.006\\
+2 & 0.421 & 0.753 & 0.435\\
+3 & 0.405 & 0.184 & 0.405\\
+4 & 0.107 & 0.016 & 0.100\\
+5 & 0.062 & 0.000 & 0.054\\
+\hline
+\end{tabular}
+\end{center}
+
+The true order is \(p=3\). Both AIC
+and AICc select the correct order
+with probability 0.405, while BIC
+selects it with probability 0.184.
+
+BIC selects AR(2) in 75.3\% of
+simulations, again tending to
+underestimate the true order.
+The relatively small third AR
+coefficient, \(\phi_3=-0.1\),
+makes distinguishing AR(3) from
+AR(2) difficult at this sample size.
+
+AIC selects orders above the true
+order in 16.9\% of simulations,
+compared with 15.4\% for AICc.
+BIC rarely overfits but frequently
+selects an underspecified model.
+
+\textbf{Conclusion.}
+Across both experiments, AIC and AICc
+recover the true order more frequently
+than BIC at \(n=200\), although neither
+consistently identifies the correct model.
+
+BIC favors simpler models because of
+its larger penalty for additional
+parameters. AICc moderates the
+overfitting tendency of AIC through
+its finite-sample correction.
+
+These findings illustrate the trade-off
+between underfitting and overfitting
+in finite samples. BIC's asymptotic
+consistency does not guarantee the
+highest probability of selecting the
+true model at a particular finite
+sample size.
+
+
+
+
+\subsection*{Problem 5(a)}
+
+The given AR(2) model is
+\[
+X_t-1.2X_{t-1}+0.5X_{t-2}=W_t,
+\qquad W_t\sim WN(0,1).
+\]
+
+Its characteristic polynomial is
+\[
+\Phi(z)=1-1.2z+0.5z^2.
+\]
+
+Solving \(\Phi(z)=0\) gives
+\[
+z_{1,2}=1.2\pm i\sqrt{0.56}.
+\]
+
+Both roots satisfy
+\[
+|z_{1,2}|=\sqrt{2}>1.
+\]
+
+Therefore, the process is \textbf{causal}
+and admits a convergent MA(\(\infty\))
+representation
+\[
+X_t=\sum_{j=0}^{\infty}\psi_jW_{t-j}.
+\]
+
+Matching coefficients in
+\[
+(1-1.2B+0.5B^2)
+\sum_{j=0}^{\infty}\psi_jB^j=1,
+\]
+we obtain
+\[
+\psi_0=1,\qquad
+\psi_1=1.2,
+\]
+and the recursion
+\[
+\psi_j=1.2\psi_{j-1}-0.5\psi_{j-2}.
+\]
+
+Thus,
+\[
+\begin{aligned}
+\psi_0&=\boxed{1},\\
+\psi_1&=\boxed{1.2},\\
+\psi_2&=1.2(1.2)-0.5(1)
+=\boxed{0.94},\\
+\psi_3&=1.2(0.94)-0.5(1.2)
+=\boxed{0.528}.
+\end{aligned}
+\]
+
+An unexpected one-megawatt shock corresponds
+to an innovation of magnitude \(W_t=1\).
+Since observations are 15 minutes apart,
+the predicted additional power use is
+\[
+\boxed{
+\begin{aligned}
+15\text{ minutes: }&1.2\text{ MW},\\
+30\text{ minutes: }&0.94\text{ MW},\\
+45\text{ minutes: }&0.528\text{ MW}.
+\end{aligned}
+}
+\]
+
+These values represent changes relative
+to the forecast without the shock.
+
+\subsection*{Problem 5(b)}
+
+For a stationary AR(2) process, the
+Yule--Walker equations give
+\[
+\rho(1)=1.2-0.5\rho(1),
+\]
+and hence
+\[
+\rho(1)=0.8.
+\]
+
+For higher lags,
+\[
+\rho(h)=1.2\rho(h-1)-0.5\rho(h-2).
+\]
+
+Therefore,
+\[
+\begin{aligned}
+\rho(2)&=1.2(0.8)-0.5=0.46,\\
+\rho(3)&=1.2(0.46)-0.5(0.8)=0.152.
+\end{aligned}
+\]
+
+Using the Durbin--Levinson recursion,
+\[
+\phi_{11}=\rho(1)=0.8,
+\]
+\[
+\phi_{22}
+=\frac{\rho(2)-\rho(1)^2}
+{1-\rho(1)^2}
+=\frac{0.46-0.64}{1-0.64}
+=-0.5,
+\]
+and
+\[
+\phi_{21}
+=\phi_{11}-\phi_{22}\phi_{11}
+=1.2.
+\]
+
+At lag three,
+\[
+\begin{aligned}
+\phi_{33}
+&=\frac{\rho(3)-\phi_{21}\rho(2)
+-\phi_{22}\rho(1)}
+{1-\phi_{21}\rho(1)-\phi_{22}\rho(2)}\\
+&=\frac{0.152-1.2(0.46)+0.5(0.8)}
+{1-1.2(0.8)+0.5(0.46)}\\
+&=\frac{0}{0.27}.
+\end{aligned}
+\]
+
+Thus,
+\[
+\boxed{\phi_{33}=0}.
+\]
+
+\subsection*{Problem 5(c)}
+
+The AI's three answers contain the
+following errors.
+
+\begin{enumerate}
+\item \textbf{Incorrect causality condition.}
+The AI applies the AR(1) condition
+\(|\phi_1|<1\) to an AR(2) model.
+For an AR(2), causality requires both
+roots of the characteristic polynomial
+to lie outside the unit circle.
+Here their moduli are \(\sqrt{2}>1\),
+so the model is causal.
+
+\item \textbf{Incorrect impulse-response
+recursion.}
+The AI uses a positive coefficient on
+\(\psi_{j-2}\), but the correct recursion is
+\[
+\psi_j=1.2\psi_{j-1}-0.5\psi_{j-2}.
+\]
+Consequently, the correct coefficients are
+\[
+(\psi_0,\psi_1,\psi_2,\psi_3)
+=(1,1.2,0.94,0.528).
+\]
+The AI's growing coefficients arise from
+the incorrect recursion and do not
+demonstrate noncausality.
+
+\item \textbf{Confusing ACF with PACF.}
+The value \(0.152\) is the lag-three
+autocorrelation \(\rho(3)\), not the
+partial autocorrelation \(\phi_{33}\).
+The correct value is
+\[
+\boxed{\phi_{33}=0}.
+\]
+The theoretical PACF of an AR(2) process
+cuts off after lag two, so an AR(3)
+model is not required by this evidence.
+\end{enumerate}
+
+The AI's impulse-response calculation
+does not independently confirm its
+causality claim because it uses the same
+incorrectly specified recursion.
+A computation based on an incorrect
+recurrence cannot serve as independent
+evidence for the original model.
+
+The correct characteristic roots and
+convergent impulse-response coefficients
+support the causal AR(2) specification.
+
+
+\section*{AI-use disclosure}
+OpenAI ChatGPT was used to draft/check the mathematical derivations, evaluate the provided AI response in Problem 2, and generate parts of the code that made the plots in Problem 3, it also suggested a few tweaks to my original code for cleanliness that I obliged. 
+
+\appendix
+
+
+
+\end{document}
