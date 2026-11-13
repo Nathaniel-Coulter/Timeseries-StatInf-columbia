@@ -1,0 +1,49 @@
+IBM Homework Problem 4 | n=369
+Level ADF test p = 0.776569 (null: unit root)
+
+Transformation first-difference stability (CV of block SDs):
+transform  std_cv_across_6_blocks   adf_p  scale_for_fitting  diff_std_on_original_scale
+      log                 0.55453 0.02486           100.0000                     0.01775
+     sqrt                 0.45698 0.02452            10.0000                     0.17797
+   square                 0.22913 0.00000             0.0001                  6371.12685
+
+ARMA grid p,q=0,...,3 with mean (criteria are within-scale only):
+transform criterion  p  q        aic        bic       aicc
+      log       aic  3  2 1463.79486 1491.15144 1464.10597
+      log       bic  0  0 1469.74977 1477.56594 1469.78265
+      log      aicc  3  2 1463.79486 1491.15144 1464.10597
+     sqrt       aic  3  2 1464.78657 1492.14315 1465.09768
+     sqrt       bic  0  0 1471.60043 1479.41660 1471.63331
+     sqrt      aicc  3  2 1464.78657 1492.14315 1465.09768
+   square       aic  0  1  709.38978  721.11403  709.45572
+   square       bic  0  1  709.38978  721.11403  709.45572
+   square      aicc  0  1  709.38978  721.11403  709.45572
+
+Mean vs no mean for AIC-selected order:
+transform  p  q specification         aic         bic        aicc  mean_on_scaled_diff  mean_CI_lower  mean_CI_upper
+      log  3  2     with_mean 1463.794861 1491.151441 1464.105972            -0.070122      -0.266145       0.125901
+      log  3  2       no_mean 1462.404779 1485.853277 1462.637466             0.000000            NaN            NaN
+     sqrt  3  2     with_mean 1464.786568 1492.143148 1465.097679            -0.071179      -0.274249       0.131891
+     sqrt  3  2       no_mean 1463.364244 1486.812742 1463.596931             0.000000            NaN            NaN
+   square  0  1     with_mean  709.389781  721.114030  709.455716            -0.022815      -0.100216       0.054587
+   square  0  1       no_mean  707.756532  715.572698  707.789409             0.000000            NaN            NaN
+
+Residual diagnostics (AICc-preferred mean specification):
+transform  p  q mean_spec  lag10_LB_p  lag20_LB_p  JB_p  standardized_residual_sd  abs_standardized_resid_gt_3
+      log  3  2   no_mean    0.284119    0.003479   0.0                  1.001225                            6
+     sqrt  3  2   no_mean    0.310878    0.007337   0.0                  1.005243                            5
+   square  0  1   no_mean    0.515673    0.118977   0.0                  1.000882                            4
+
+log ARMA(3,2) with_mean: params {'const': np.float64(-0.07012189), 'ar.L1': np.float64(0.86574296), 'ar.L2': np.float64(-0.94108161), 'ar.L3': np.float64(-0.03904311), 'ma.L1': np.float64(-0.86265336), 'ma.L2': np.float64(0.96755683), 'sigma2': np.float64(3.00098378)}
+
+log ARMA(3,2) no_mean: params {'ar.L1': np.float64(0.86731967), 'ar.L2': np.float64(-0.94257123), 'ar.L3': np.float64(-0.03737878), 'ma.L1': np.float64(-0.86264559), 'ma.L2': np.float64(0.96767823), 'sigma2': np.float64(3.00605112)}
+
+sqrt ARMA(3,2) with_mean: params {'const': np.float64(-0.07117912), 'ar.L1': np.float64(0.90813715), 'ar.L2': np.float64(-0.99170546), 'ar.L3': np.float64(0.00464682), 'ma.L1': np.float64(-0.87905563), 'ma.L2': np.float64(0.99993592), 'sigma2': np.float64(2.97955338)}
+
+sqrt ARMA(3,2) no_mean: params {'ar.L1': np.float64(0.90964912), 'ar.L2': np.float64(-0.99308231), 'ar.L3': np.float64(0.00622112), 'ma.L1': np.float64(-0.87900401), 'ma.L2': np.float64(0.99992059), 'sigma2': np.float64(2.98453502)}
+
+square ARMA(0,1) with_mean: params {'const': np.float64(-0.02281465), 'ma.L1': np.float64(0.14830614), 'sigma2': np.float64(0.39591021)}
+
+square ARMA(0,1) no_mean: params {'ma.L1': np.float64(0.14913325), 'sigma2': np.float64(0.39630256)}
+
+NOTE: Gaussian likelihood levels/AIC are not comparable across different transformations; use variance stability to pick transform and criteria to compare model orders within a transform.
